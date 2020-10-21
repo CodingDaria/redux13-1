@@ -1,9 +1,12 @@
 import axios from 'axios'
 
 const SET_PRODUCTS = 'SET_PRODUCTS'
+const SET_RATES = 'SET_RATES'
 
 const initialState = {
-  listOfProducts: []
+  listOfProducts: [],
+  currentRates: {},
+  currency: 'EUR'
 }
 
 export default (state = initialState, action) => {
@@ -12,6 +15,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         listOfProducts: action.list
+      }
+    case SET_RATES:
+      return {
+        ...state,
+        currentRates: action.currentRates,
+        currency: action.currency
       }
     default:
       return state
@@ -28,6 +37,21 @@ export function setProducts() {
   }
 }
 
+export function setRates(currency) {
+  return function (dispatch, getState) {
+    const state = getState()
+    console.log(state)
+    axios(`/api/v1/exchange/${currency}`)
+      .then((res) => res.data)
+      .then((currentRates) => {
+        dispatch({
+          type: SET_RATES,
+          currentRates,
+          currency: currency.toUpperCase() })
+      })
+  }
+}
+
   // rates: {
   //   USD: 1
   // },
@@ -40,6 +64,8 @@ export function setProducts() {
 //         rates: action.rates
 //       }
 //     }
+
+// /api/v1/exchange/:currency
 
 // export function setCurrency(currency) {
 //   return (dispatch, getState) => {

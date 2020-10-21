@@ -5,6 +5,7 @@ import bodyParser from 'body-parser'
 import sockjs from 'sockjs'
 import { renderToStaticNodeStream } from 'react-dom/server'
 import React from 'react'
+import axios from 'axios'
 
 import cookieParser from 'cookie-parser'
 import config from './config'
@@ -47,6 +48,18 @@ server.get('/api/v1/products', async (req, res) => {
     .then((file) => JSON.parse(file))
     .catch(() => ({ products: 'not available' }))
   res.json(products)
+})
+
+server.get('/api/v1/exchange/:currency', async (req, res) => {
+  const { currency }  = req.params
+  const currencies = ['USD', 'EUR', 'CAD']
+  const ratesRaw = await axios(`https://api.exchangeratesapi.io/latest?base=${currency.toUpperCase()}`)
+    .then((it) => it.data.rates)
+    .catch(() => ({ exchange: 'not available' }))
+  const rates = Object.keys(ratesRaw).reduce((acc, rec) => {
+    return currencies.indexOf(rec) >= 0 ? ({ ...acc, [rec]: ratesRaw[rec] }) : acc
+  }, {})
+  res.json(rates)
 })
 
 server.use('/api/', (req, res) => {
