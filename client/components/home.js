@@ -1,18 +1,21 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { Switch, Route } from 'react-router-dom'
 import Head from './head'
-// import wave from '../assets/images/wave.jpg'
+import Header from './header'
+import Shop from './shop'
+import Cart from './cart'
+import Logs from './logs'
 
 const Home = () => {
-  const [counter, setCounterNew] = useState(0)
-
   return (
     <div>
       <Head title="Hello" />
-      <img alt="wave" src="images/wave.jpg" />
-      <button type="button" onClick={() => setCounterNew(counter + 1)}>
-        updateCounter
-      </button>
-      <div> Hello World Dashboard {counter} </div>
+      <Header />
+      <Switch>
+        <Route exact path="/" component={() => <Shop />} />
+        <Route exact path="/cart" component={() => <Cart />} />
+        <Route exact path="/logs" component={() => <Logs />} />
+      </Switch>
     </div>
   )
 }

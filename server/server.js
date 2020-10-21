@@ -10,6 +10,8 @@ import cookieParser from 'cookie-parser'
 import config from './config'
 import Html from '../client/html'
 
+const { readFile } = require('fs').promises
+
 const Root = () => ''
 
 try {
@@ -38,8 +40,14 @@ const middleware = [
   bodyParser.json({ limit: '50mb', extended: true }),
   cookieParser()
 ]
-
 middleware.forEach((it) => server.use(it))
+
+server.get('/api/v1/products', async (req, res) => {
+  const products = await readFile(`${__dirname}/products.json`, { encoding: 'utf8' })
+    .then((file) => JSON.parse(file))
+    .catch(() => ({ products: 'not available' }))
+  res.json(products)
+})
 
 server.use('/api/', (req, res) => {
   res.status(404)
@@ -50,6 +58,8 @@ const [htmlStart, htmlEnd] = Html({
   body: 'separator',
   title: 'Skillcrucial - Become an IT HERO'
 }).split('separator')
+
+// https://raw.githubusercontent.com/ovasylenko/skillcrcuial-ecommerce-test-data/master/data.json
 
 server.get('/', (req, res) => {
   const appStream = renderToStaticNodeStream(<Root location={req.url} context={{}} />)
