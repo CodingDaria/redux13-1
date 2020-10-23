@@ -14,10 +14,10 @@ const Shop = () => {
     <div className="flex items-center justify-center h-screen">
       {/* className="bg-indigo-800 hover:text-red-500 text-white font-bold rounded-lg border shadow-lg p-10" */}
       <div className="flex flex-wrap">
-        {products.map((item) => {
+        {products.map((product) => {
           return (
-            <div key={item.id} className="m-2">
-              <Card item={item} />
+            <div key={product.id} className="m-2">
+              <Card product={product} />
             </div>
           )
         })}

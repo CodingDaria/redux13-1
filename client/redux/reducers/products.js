@@ -5,7 +5,9 @@ const SET_RATES = 'SET_RATES'
 
 const initialState = {
   listOfProducts: [],
-  currentRates: {},
+  currentRates: {
+    EUR: 1
+  },
   currency: 'EUR'
 }
 
@@ -41,13 +43,14 @@ export function setRates(currency) {
   return function (dispatch, getState) {
     const state = getState()
     console.log(state)
-    axios(`/api/v1/exchange/${currency}`)
+    axios('/api/v1/exchange')
       .then((res) => res.data)
       .then((currentRates) => {
         dispatch({
           type: SET_RATES,
           currentRates,
-          currency: currency.toUpperCase() })
+          currency: currency.toUpperCase()
+        })
       })
   }
 }

@@ -50,14 +50,13 @@ server.get('/api/v1/products', async (req, res) => {
   res.json(products)
 })
 
-server.get('/api/v1/exchange/:currency', async (req, res) => {
-  const { currency }  = req.params
+server.get('/api/v1/exchange', async (req, res) => {
   const currencies = ['USD', 'EUR', 'CAD']
-  const ratesRaw = await axios(`https://api.exchangeratesapi.io/latest?base=${currency.toUpperCase()}`)
+  const ratesRaw = await axios('https://api.exchangeratesapi.io/latest')
     .then((it) => it.data.rates)
     .catch(() => ({ exchange: 'not available' }))
   const rates = Object.keys(ratesRaw).reduce((acc, rec) => {
-    return currencies.indexOf(rec) >= 0 ? ({ ...acc, [rec]: ratesRaw[rec] }) : acc
+    return currencies.indexOf(rec) >= 0 ? { ...acc, [rec]: ratesRaw[rec] } : acc
   }, {})
   res.json(rates)
 })
