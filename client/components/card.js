@@ -1,10 +1,15 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { setCart } from '../redux/reducers/products'
 
 const Card = (props) => {
   const { product } = props
   const currency = useSelector((store) => store.products.currency)
   const currentRate = useSelector((store) => store.products.currentRates[currency])
+  const dispatch = useDispatch()
+  const onClick = () => {
+    dispatch(setCart(product))
+  }
   const priceRaw = product.price * currentRate
   const price = priceRaw.toFixed(2)
   return (
@@ -17,7 +22,9 @@ const Card = (props) => {
       <div className="px-6 py-4">
         <div className="card__title font-bold text-xl mb-2">{product.title}</div>
         <div className="flex justify-evenly">
-          <div className="card__price text-gray-700 text-base">{currency === 'EUR' ? product.price : price}</div>
+          <div className="card__price text-gray-700 text-base">
+            {currency === 'EUR' ? product.price : price}
+          </div>
           <div className="currency text-gray-700 text-base">{currency}</div>
         </div>
         <div className="card__product-amount text-gray-700 text-base">card__product-amount</div>
@@ -26,6 +33,7 @@ const Card = (props) => {
         <button
           type="button"
           className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+          onClick={onClick}
         >
           Add
         </button>

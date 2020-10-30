@@ -2,13 +2,15 @@ import axios from 'axios'
 
 const SET_PRODUCTS = 'SET_PRODUCTS'
 const SET_RATES = 'SET_RATES'
+const SET_CART = 'SET_CART'
 
 const initialState = {
   listOfProducts: [],
   currentRates: {
     EUR: 1
   },
-  currency: 'EUR'
+  currency: 'EUR',
+  cartProducts: []
 }
 
 export default (state = initialState, action) => {
@@ -23,6 +25,21 @@ export default (state = initialState, action) => {
         ...state,
         currentRates: action.currentRates,
         currency: action.currency
+      }
+    case SET_CART:
+      return {
+        ...state,
+        cartProducts: state.cartProducts.find((product) => product.id === action.product.id)
+          ? [ ...state.cartProducts.map((product) => {
+            if (product.id === action.product.id) {
+              return {
+                ...product,
+                amount: product.amount + 1
+              }
+            }
+            return product
+          }) ]
+          : [ ...state.cartProducts, ...action.product ]
       }
     default:
       return state
@@ -55,6 +72,15 @@ export function setRates(currency) {
   }
 }
 
+export function setCart(product) {
+  return function (dispatch) {
+    dispatch({
+      type: SET_CART,
+      product: { ...product, amount: 1 }
+    })
+  }
+}
+
   // rates: {
   //   USD: 1
   // },
@@ -83,3 +109,11 @@ export function setRates(currency) {
 //     })
 //   }
 // }
+// for (let product of state.cartProducts) {
+//           if (product.id === action.product.id) {
+//             return {
+//               ...product,
+//               amount: product.amount + 1
+//             }
+//           }
+//         }
