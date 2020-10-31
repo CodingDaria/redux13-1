@@ -3,6 +3,7 @@ import axios from 'axios'
 const SET_PRODUCTS = 'SET_PRODUCTS'
 const SET_RATES = 'SET_RATES'
 const SET_CART = 'SET_CART'
+const PRODUCT_DECREASE = 'PRODUCT_DECREASE'
 
 const initialState = {
   listOfProducts: [],
@@ -30,7 +31,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         cartProducts: state.cartProducts.find((product) => product.id === action.product.id)
-          ? [ ...state.cartProducts.map((product) => {
+          ? state.cartProducts.map((product) => {
             if (product.id === action.product.id) {
               return {
                 ...product,
@@ -38,8 +39,24 @@ export default (state = initialState, action) => {
               }
             }
             return product
-          }) ]
-          : [ ...state.cartProducts, ...action.product ]
+          })
+          : [...state.cartProducts, ...action.product]
+      }
+    case PRODUCT_DECREASE:
+      return {
+        ...state,
+        cartProducts: state.cartProducts.reduce((acc, product) => {
+          if (product.id === action.product.id) {
+            if (product.amount === 1) {
+              return acc
+            }
+            return [...acc, {
+                ...product,
+                amount: product.amount - 1
+              }]
+          }
+          return [...acc, product]
+        }, [])
       }
     default:
       return state
@@ -47,7 +64,7 @@ export default (state = initialState, action) => {
 }
 
 export function setProducts() {
-  return function (dispatch) {
+  return (dispatch) => {
     axios('/api/v1/products')
       .then((res) => res.data)
       .then((list) => {
@@ -57,7 +74,7 @@ export function setProducts() {
 }
 
 export function setRates(currency) {
-  return function (dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState()
     console.log(state)
     axios('/api/v1/exchange')
@@ -73,7 +90,7 @@ export function setRates(currency) {
 }
 
 export function setCart(product) {
-  return function (dispatch) {
+  return (dispatch) => {
     dispatch({
       type: SET_CART,
       product: { ...product, amount: 1 }
@@ -81,39 +98,28 @@ export function setCart(product) {
   }
 }
 
-  // rates: {
-  //   USD: 1
-  // },
-  // currency: 'USD'
+export function productDecrease(product) {
+  return (dispatch) => {
+    dispatch({
+      type: PRODUCT_DECREASE,
+      product
+    })
+  }
+}
 
-// case SET_CURRENCY: {
-//       return {
-//         ...state,
-//         currency: action.data,
-//         rates: action.rates
-//       }
-//     }
-
-// /api/v1/exchange/:currency
-
-// export function setCurrency(currency) {
-//   return (dispatch, getState) => {
-//     const state = getState()
-//     console.log(state)
-//     axios('https://api.exchangeratesapi.io/latest?base=USD').then(({ data }) => {
-//       dispatch({
-//         type: SET_CURRENCY,
-//         data: currency.toUpperCase(),
-//         rates: data.rates
-//       })
-//     })
+// let cartProductsTmp = [ ...state.cartProducts ]
+// let isProductInCart = false
+// for (const product of state.cartProducts) {
+//   if (product.id === action.product.id) {
+//     cartProductsTmp.push({ ...product, amount: product.amount + 1 })
+//     isProductInCart = true
 //   }
+//   cartProductsTmp.push(product)
 // }
-// for (let product of state.cartProducts) {
-//           if (product.id === action.product.id) {
-//             return {
-//               ...product,
-//               amount: product.amount + 1
-//             }
-//           }
-//         }
+// if (!isProductInCart) {
+//   cartProductsTmp = [ ...state.cartProducts, ...action.product ]
+// }
+// return {
+//   ...state,
+//   cartProducts: cartProductsTmp
+// }
