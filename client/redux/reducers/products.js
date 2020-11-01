@@ -4,6 +4,7 @@ const SET_PRODUCTS = 'SET_PRODUCTS'
 const SET_RATES = 'SET_RATES'
 const SET_CART = 'SET_CART'
 const PRODUCT_DECREASE = 'PRODUCT_DECREASE'
+const SET_SORT = 'SET_SORT'
 
 const initialState = {
   listOfProducts: [],
@@ -11,7 +12,8 @@ const initialState = {
     EUR: 1
   },
   currency: 'EUR',
-  cartProducts: []
+  cartProducts: [],
+  sort: ''
 }
 
 export default (state = initialState, action) => {
@@ -58,6 +60,23 @@ export default (state = initialState, action) => {
           return [...acc, product]
         }, [])
       }
+    case SET_SORT:
+      if (action.sort === 'price') {
+        return {
+          ...state,
+          listOfProducts: state.listOfProducts.sort((a, b) => b.price - a.price)
+        }
+      }
+      if (action.sort === 'title') {
+        return {
+          ...state,
+          listOfProducts: state.listOfProducts.sort((a, b) => a.title.localeCompare(b.title))
+        }
+      }
+      return {
+        ...state,
+        sort: action.sort
+      }
     default:
       return state
   }
@@ -103,6 +122,15 @@ export function productDecrease(product) {
     dispatch({
       type: PRODUCT_DECREASE,
       product
+    })
+  }
+}
+
+export function setSort(sort) {
+  return (dispatch) => {
+    dispatch({
+      type: SET_SORT,
+      sort
     })
   }
 }

@@ -1,9 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 
-const OrderCount = () => {
-  const cartProducts = useSelector((store) => store.products.cartProducts)
+const OrderCount = (props) => {
+  const { cartProducts } = props
   return (
     <div className="flex flex-col items-center pr-8">
       <div className="my-1 text-m text-gray-800 font-medium">

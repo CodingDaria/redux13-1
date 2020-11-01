@@ -4,6 +4,8 @@ import { setCart } from '../redux/reducers/products'
 
 const Card = (props) => {
   const { product } = props
+  const cartProducts = useSelector((store) => store.products.cartProducts)
+  const thisProduct = cartProducts.find((item) => item.id === product.id)
   const currency = useSelector((store) => store.products.currency)
   const currentRate = useSelector((store) => store.products.currentRates[currency])
   const dispatch = useDispatch()
@@ -27,7 +29,7 @@ const Card = (props) => {
           </div>
           <div className="currency text-gray-700 text-base">{currency}</div>
         </div>
-        <div className="card__product-amount text-gray-700 text-base">card__product-amount</div>
+        <div className="card__product-amount text-gray-700 text-base">In cart: {thisProduct ? thisProduct.amount : 0}</div>
       </div>
       <div className="px-6 pt-4 pb-2">
         <button

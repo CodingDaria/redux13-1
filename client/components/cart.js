@@ -8,8 +8,8 @@ const Cart = () => {
   const currentRate = useSelector((store) => store.products.currentRates[currency])
   const totalPrice =
     currency === 'EUR'
-      ? cartProducts.reduce((acc, rec) => acc + rec.price * rec.amount, 0)
-      : cartProducts.reduce((acc, rec) => acc + rec.price * rec.amount, 0) * currentRate
+      ? cartProducts.reduce((acc, product) => acc + product.price * product.amount, 0)
+      : cartProducts.reduce((acc, product) => acc + product.price * product.amount, 0) * currentRate
   return (
     <div>
       <div className="flex flex-col items-center">
