@@ -11,7 +11,7 @@ import cookieParser from 'cookie-parser'
 import config from './config'
 import Html from '../client/html'
 
-const { readFile } = require('fs').promises
+const { readFile, writeFile } = require('fs').promises
 
 const Root = () => ''
 
@@ -59,6 +59,29 @@ server.get('/api/v1/exchange', async (req, res) => {
     return currencies.indexOf(rec) >= 0 ? { ...acc, [rec]: ratesRaw[rec] } : acc
   }, {})
   res.json(rates)
+})
+
+server.get('/api/v1/logs', async (req, res) => {
+  const logs = await readFile(`${__dirname}/logs.json`, { encoding: 'utf8' })
+    .then((file) => JSON.parse(file))
+    .catch(() => ({ logs: 'not available' }))
+  res.json(logs)
+})
+
+server.post('/api/v1/logs', async (req, res) => {
+  const logs = await readFile(`${__dirname}/logs.json`, { encoding: 'utf8' })
+    .then((file) => JSON.parse(file))
+  const date = +new Date()
+  const dateFull = new Date(date)
+  const newLog = { id: date, date: dateFull.toLocaleString('ru'), ...req.body }
+  const newLogs = logs.concat(newLog)
+  await writeFile(`${__dirname}/logs.json`, JSON.stringify(newLogs), { encoding: 'utf8' })
+  res.json(newLogs)
+})
+
+server.delete('/api/v1/logs', async (req, res) => {
+  await writeFile(`${__dirname}/logs.json`, JSON.stringify([]), { encoding: 'utf8' })
+  res.json({ message: 'logs deleted' })
 })
 
 server.use('/api/', (req, res) => {

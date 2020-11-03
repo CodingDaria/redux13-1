@@ -163,6 +163,7 @@
     },
     "nodemonConfig": {
         "ignore": [
+            "logs.json",
             "*.hot-update.json"
         ]
     },

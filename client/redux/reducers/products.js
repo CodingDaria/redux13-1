@@ -89,6 +89,9 @@ export function setProducts() {
       .then((list) => {
         dispatch({ type: SET_PRODUCTS, list })
       })
+      .catch(() => {
+        dispatch({ type: SET_PRODUCTS, list: [] })
+      })
   }
 }
 
@@ -134,6 +137,8 @@ export function setSort(sort) {
     })
   }
 }
+
+// axios.post(`/api/v1/tasks/${category}`, { title: tasktitle }).then((it) => it.data)
 
 // let cartProductsTmp = [ ...state.cartProducts ]
 // let isProductInCart = false
