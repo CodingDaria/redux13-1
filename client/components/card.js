@@ -29,7 +29,9 @@ const Card = (props) => {
           </div>
           <div className="currency text-gray-700 text-base">{currency}</div>
         </div>
-        <div className="card__product-amount text-gray-700 text-base">In cart: {thisProduct ? thisProduct.amount : 0}</div>
+        <div className="card__product-amount text-gray-700 text-base">
+          In cart: {thisProduct ? thisProduct.amount : 0}
+        </div>
       </div>
       <div className="px-6 pt-4 pb-2">
         <button

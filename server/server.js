@@ -69,8 +69,9 @@ server.get('/api/v1/logs', async (req, res) => {
 })
 
 server.post('/api/v1/logs', async (req, res) => {
-  const logs = await readFile(`${__dirname}/logs.json`, { encoding: 'utf8' })
-    .then((file) => JSON.parse(file))
+  const logs = await readFile(`${__dirname}/logs.json`, { encoding: 'utf8' }).then((file) =>
+    JSON.parse(file)
+  )
   const date = +new Date()
   const dateFull = new Date(date)
   const newLog = { id: date, date: dateFull.toLocaleString('ru'), ...req.body }

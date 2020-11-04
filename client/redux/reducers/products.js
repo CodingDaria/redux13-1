@@ -5,6 +5,7 @@ const SET_RATES = 'SET_RATES'
 const SET_CART = 'SET_CART'
 const PRODUCT_DECREASE = 'PRODUCT_DECREASE'
 const SET_SORT = 'SET_SORT'
+const SET_LOGS = 'SET_LOGS'
 
 const initialState = {
   listOfProducts: [],
@@ -13,7 +14,8 @@ const initialState = {
   },
   currency: 'EUR',
   cartProducts: [],
-  sort: ''
+  sort: '',
+  logs: []
 }
 
 export default (state = initialState, action) => {
@@ -77,6 +79,11 @@ export default (state = initialState, action) => {
         ...state,
         sort: action.sort
       }
+    case SET_LOGS:
+      return {
+        ...state,
+        logs: action.logs
+      }
     default:
       return state
   }
@@ -135,6 +142,19 @@ export function setSort(sort) {
       type: SET_SORT,
       sort
     })
+  }
+}
+
+export function setLogs() {
+  return (dispatch) => {
+    axios('/api/v1/logs')
+      .then((res) => res.data)
+      .then((logs) => {
+        dispatch({ type: SET_LOGS, logs })
+      })
+      .catch(() => {
+        dispatch({ type: SET_LOGS, logs: [] })
+      })
   }
 }
 

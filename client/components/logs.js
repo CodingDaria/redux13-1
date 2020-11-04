@@ -1,15 +1,32 @@
-import React from 'react'
-import Head from './head'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
+import Log from './log'
+import { setLogs } from '../redux/reducers/products'
 
 const Logs = () => {
+  const logs = useSelector((store) => store.products.logs)
+  const dispatch = useDispatch()
+  const onClick = () => {
+    axios.delete('/api/v1/logs')
+    dispatch(setLogs())
+  }
+  useEffect(() => {
+    dispatch(setLogs())
+    return () => {}
+  }, [])
   return (
     <div>
-      <Head title="Hello" />
-      <div className="flex items-center justify-center h-screen">
-        <div className="bg-indigo-800 hover:text-red-500 text-white font-bold rounded-lg border shadow-lg p-10">
-          This is Logs component
-        </div>
+      <div className="flex items-center justify-center">
+        {logs.map((log) => {
+          return (
+            <div key={log.id}>
+              <Log log={log} />
+            </div>
+          )
+        })}
       </div>
+      <button type="button" onClick={onClick}>Delete logs</button>
     </div>
   )
 }
