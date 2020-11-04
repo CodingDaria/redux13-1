@@ -2,7 +2,7 @@ import React from 'react'
 
 const Log = (props) => {
   const { log } = props
-  return <div>
+  return <div className="flex flex-row">
     <div>{log.date}</div>
     <div>{log.logs}</div>
   </div>

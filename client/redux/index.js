@@ -4,6 +4,8 @@ import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import SockJS from 'sockjs-client'
 
+// https://help.mouseflow.com/en/articles/4310818-tracking-url-changes-with-react
+
 import rootReducer from './reducers'
 import createHistory from './history'
 import socketActions from './sockets'
@@ -21,6 +23,7 @@ const composeFunc = process.env.NODE_ENV === 'development' ? composeWithDevTools
 const composedEnhancers = composeFunc(applyMiddleware(...middleware), ...enhancers)
 
 const store = createStore(rootReducer(history), initialState, composedEnhancers)
+
 let socket
 
 if (typeof ENABLE_SOCKETS !== 'undefined' && ENABLE_SOCKETS) {

@@ -104,8 +104,9 @@ export function setProducts() {
 
 export function setRates(currency) {
   return (dispatch, getState) => {
-    const state = getState()
-    console.log(state)
+    const store = getState()
+    const { currency: prevCurrency } = store.products
+    axios.post('/api/v1/logs', { logs: `Currency changed from ${prevCurrency} to ${currency}` })
     axios('/api/v1/exchange')
       .then((res) => res.data)
       .then((currentRates) => {
@@ -130,6 +131,7 @@ export function setCart(product) {
 
 export function productDecrease(product) {
   return (dispatch) => {
+    axios.post('/api/v1/logs', { logs: `${product.title} removed from cart` })
     dispatch({
       type: PRODUCT_DECREASE,
       product
@@ -139,6 +141,7 @@ export function productDecrease(product) {
 
 export function setSort(sort) {
   return (dispatch) => {
+    axios.post('/api/v1/logs', { logs: `sorted by ${sort}` })
     dispatch({
       type: SET_SORT,
       sort
