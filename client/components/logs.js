@@ -17,7 +17,7 @@ const Logs = () => {
   }, [])
   return (
     <div>
-      <div className="flex items-center justify-center">
+      <div className="flex flex-col items-stretch">
         {logs.map((log) => {
           return (
             <div key={log.id}>

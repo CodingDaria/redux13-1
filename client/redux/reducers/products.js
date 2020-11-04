@@ -120,6 +120,7 @@ export function setRates(currency) {
 
 export function setCart(product) {
   return (dispatch) => {
+    axios.post('/api/v1/logs', { logs: `${product.title} added to cart` })
     dispatch({
       type: SET_CART,
       product: { ...product, amount: 1 }
@@ -158,7 +159,7 @@ export function setLogs() {
   }
 }
 
-// axios.post(`/api/v1/tasks/${category}`, { title: tasktitle }).then((it) => it.data)
+// axios.post('/api/v1/logs', { title: tasktitle }).then((it) => it.data)
 
 // let cartProductsTmp = [ ...state.cartProducts ]
 // let isProductInCart = false
