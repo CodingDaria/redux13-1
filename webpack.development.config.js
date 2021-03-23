@@ -34,7 +34,6 @@ const config = {
     host: 'localhost',
     port: 8087,
     disableHostCheck: true,
-    open: true,
     historyApiFallback: true,
     overlay: {
       warnings: false,
