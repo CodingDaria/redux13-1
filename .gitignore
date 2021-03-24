@@ -65,4 +65,5 @@ dist
 .DS_Store
 */.DS_Store
 yarn-error.log
+logs.json
 *.csv
